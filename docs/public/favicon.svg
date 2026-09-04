@@ -1,5 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs><linearGradient id="g" x1="8" y1="7" x2="57" y2="58" gradientUnits="userSpaceOnUse"><stop stop-color="#19c9b0"/><stop offset="1" stop-color="#3156d9"/></linearGradient></defs>
-  <rect x="4" y="4" width="56" height="56" rx="18" fill="url(#g)"/>
-  <path d="M20 46V18h13.2c7.2 0 11.8 3.8 11.8 10 0 4.3-2.2 7.5-6 9l7 9h-8l-5.8-7.8H27V46h-7Zm7-13.6h5.6c3.5 0 5.4-1.4 5.4-4.2 0-2.8-1.9-4.1-5.4-4.1H27v8.3Z" fill="white"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ReMe">
+  <defs>
+    <linearGradient id="brand" x1="8" y1="7" x2="57" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#18c7ac"/>
+      <stop offset="0.48" stop-color="#159fbd"/>
+      <stop offset="1" stop-color="#3156d9"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="22" y1="21" x2="44" y2="47" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#098b80"/>
+      <stop offset="1" stop-color="#3156d9"/>
+    </linearGradient>
+  </defs>
+
+  <!-- The rounded field is ReMe's memory space. -->
+  <rect x="3" y="3" width="58" height="58" rx="18" fill="url(#brand)"/>
+  <path d="M10 20C15 10 24 7 34 7h10c7 0 12 4 14 10" fill="none" stroke="white" stroke-opacity="0.18" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- A folded local file keeps the durable source of truth visible. -->
+  <path d="M20 11h17l11 11v27a5 5 0 0 1-5 5H20a5 5 0 0 1-5-5V16a5 5 0 0 1 5-5Z" fill="white"/>
+  <path d="M37 11v8a3 3 0 0 0 3 3h8" fill="#dff7f4"/>
+
+  <!-- The open counter and forward leg make the monogram feel connected and active. -->
+  <path d="M23 47V22h10.6c6.2 0 10.2 3.4 10.2 8.9 0 3.7-1.9 6.6-5.2 8l6.1 8.1h-6.8l-5-6.9h-4V47H23Zm5.9-11.9h4.2c3.1 0 4.8-1.4 4.8-4.1 0-2.6-1.7-4-4.8-4h-4.2v8.1Z" fill="url(#mark)"/>
 </svg>
