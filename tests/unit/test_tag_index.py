@@ -107,10 +107,10 @@ def test_query_tag_normalization_is_public_and_not_count_limited() -> None:
     """Search expressions reuse tag rules without the per-file tag cap."""
     index = LocalTagIndex(max_tags_per_file=2, max_tag_length=8)
 
-    assert index.normalize_query_tags([" Alpha ", "BETA", "gamma", "alpha", "too-long-tag", " "]) == [
+    assert index.normalize_query_tags([" Alpha ", "BETA", "gamma x", "alpha", "too-long-tag", " "]) == [
         "alpha",
         "beta",
-        "gamma",
+        "gamma_x",
     ]
 
 
@@ -203,6 +203,18 @@ def test_list_tags_rejects_invalid_parameters(kwargs, message) -> None:
     asyncio.run(run())
 
 
+def test_list_tags_rejects_an_unhealthy_index() -> None:
+    """Do not report an unavailable derived index as an empty workspace."""
+
+    async def run() -> None:
+        index = LocalTagIndex()
+        index.set_healthy(False)
+        with pytest.raises(RuntimeError, match="tag index is unavailable"):
+            await index.list_tags()
+
+    asyncio.run(run())
+
+
 def test_list_tags_step_and_tool_schema_expose_compact_result_contract() -> None:
     """Expose list_tags through a registered step with self-describing tool parameters."""
 
@@ -260,6 +272,11 @@ def test_tag_index_reads_configured_frontmatter_key() -> None:
         (123, "tag_key must be a non-empty string", False),
         ("name", "tag_key must not be a reserved frontmatter key", False),
         ("description", "tag_key must not be a reserved frontmatter key", False),
+        ("kind", "tag_key must not be a reserved frontmatter key", False),
+        ("session_id", "tag_key must not be a reserved frontmatter key", False),
+        ("source_conversation", "tag_key must not be a reserved frontmatter key", False),
+        ("source_resource", "tag_key must not be a reserved frontmatter key", False),
+        ("status", "tag_key must not be a reserved frontmatter key", False),
         ("", "tag_key must be a non-empty string", True),
         ("name", "tag_key must not be a reserved frontmatter key", True),
         ("description", "tag_key must not be a reserved frontmatter key", True),
@@ -570,5 +587,9 @@ def test_default_config_enables_tag_index_with_explicit_key() -> None:
     assert config["jobs"]["search"]["parameters"]["properties"]["tags"]["default"] == []
     assert config["jobs"]["auto_memory"]["steps"] == [
         {"backend": "auto_memory_step"},
+        {"backend": "auto_tag_step", "max_tags_per_file": 3},
+    ]
+    assert config["jobs"]["auto_memory_cc"]["steps"] == [
+        {"backend": "auto_memory_cc_step"},
         {"backend": "auto_tag_step", "max_tags_per_file": 3},
     ]

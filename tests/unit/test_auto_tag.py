@@ -223,7 +223,7 @@ def test_normalize_memory_tags_enforces_entity_storage_contract():
             "宁德时代",
             "黄金",
         ],
-    ) == ["OpenAI", "Sam Altman", "宁德时代"]
+    ) == ["OpenAI", "Sam_Altman", "宁德时代"]
     assert normalize_memory_tags(
         ["one", "two", "three"],
         max_tags_per_file=2,
@@ -246,5 +246,25 @@ async def test_auto_tag_rejects_limit_above_tag_index_ceiling(tmp_path, monkeypa
 
     assert response.success is False
     assert response.answer == "Error: auto_tag max_tags_per_file (3) exceeds tag index limit (2)"
+    assert not wrapper.calls
+    assert note.read_bytes() == before
+
+
+@pytest.mark.asyncio
+async def test_auto_tag_rejects_an_unhealthy_tag_index(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    note = tmp_path / "memory/note.md"
+    _write_note(note)
+    before = note.read_bytes()
+    store = LocalFileStore(name="store", embedding_store="", tag_index="")
+    store.tag_index = LocalTagIndex()
+    store.tag_index.set_healthy(False)
+    wrapper = _TaggingWrapper(tmp_path)
+    step = AutoTagStep(file_store=store, agent_wrapper=wrapper)
+
+    response = await step(RuntimeContext(changes=[{"change": "modified", "path": "memory/note.md"}]))
+
+    assert response.success is False
+    assert response.answer == "Error: tag index unavailable"
     assert not wrapper.calls
     assert note.read_bytes() == before

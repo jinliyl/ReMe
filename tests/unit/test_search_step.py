@@ -923,8 +923,8 @@ def test_search_step_empty_query_fails_before_store_calls():
     asyncio.run(run())
 
 
-def test_search_step_missing_tag_index_fails_closed():
-    """A requested tag filter cannot silently widen search without an index."""
+def test_search_step_missing_tag_index_falls_back_to_unfiltered_search():
+    """An unavailable optional tag index preserves the legacy search path."""
 
     async def run():
         hit = _chunk("hit", "daily/a.md", "text", "keyword", 3.0)
@@ -933,9 +933,10 @@ def test_search_step_missing_tag_index_fails_closed():
 
         resp = await step(RuntimeContext(query="hello", limit=5, tags=["python"]))
 
-        assert resp.success is False
-        assert resp.answer == "Error: tag index unavailable"
-        assert not store.calls
+        assert resp.success is True
+        assert [result["id"] for result in resp.metadata["results"]] == ["hit"]
+        assert {call[0] for call in store.calls} == {"vector", "keyword"}
+        assert all(call[3] == {} for call in store.calls)
         assert resp.metadata["tag_filter"] == {
             "requested": True,
             "applied": False,
@@ -945,8 +946,8 @@ def test_search_step_missing_tag_index_fails_closed():
     asyncio.run(run())
 
 
-def test_search_step_unhealthy_tag_index_fails_closed():
-    """An unhealthy derived tag index cannot silently widen search."""
+def test_search_step_unhealthy_tag_index_falls_back_to_unfiltered_search():
+    """An unhealthy optional tag index preserves the legacy search path."""
 
     async def run():
         hit = _chunk("hit", "daily/a.md", "text", "keyword", 3.0)
@@ -956,9 +957,10 @@ def test_search_step_unhealthy_tag_index_fails_closed():
 
         resp = await step(RuntimeContext(query="hello", limit=5, tags=["python"]))
 
-        assert resp.success is False
-        assert resp.answer == "Error: tag index unavailable"
-        assert not store.calls
+        assert resp.success is True
+        assert [result["id"] for result in resp.metadata["results"]] == ["hit"]
+        assert {call[0] for call in store.calls} == {"vector", "keyword"}
+        assert all(call[3] == {} for call in store.calls)
         assert resp.metadata["tag_filter"]["reason"] == "tag_index_unavailable"
 
     asyncio.run(run())
