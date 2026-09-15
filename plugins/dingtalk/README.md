@@ -13,7 +13,7 @@ Install ReMe and the plugin:
 
 ```bash
 python -m pip install "reme-ai[core]>=0.4.1.12"
-reme plugins install reme-dingtalk
+reme plugins install plugins/dingtalk
 reme plugins validate dingtalk
 ```
 

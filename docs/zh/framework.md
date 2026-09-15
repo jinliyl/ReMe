@@ -239,7 +239,7 @@ entry-point 名称就是插件标识；使用
 
 ```bash
 reme plugins list
-reme plugins install reme-dingtalk
+reme plugins install plugins/dingtalk
 reme plugins install reme-auto-fin
 reme plugins install reme-daily-paper
 reme plugins show daily-paper

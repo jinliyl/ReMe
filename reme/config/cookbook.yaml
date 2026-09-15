@@ -8,7 +8,7 @@ app_name: ReMe Cookbook
 # This configuration composes three independently installable plugins. Install
 # all three packages into the same Python environment as the `reme` command:
 #
-#   reme plugins install reme-dingtalk
+#   reme plugins install plugins/dingtalk
 #   reme plugins install reme-auto-fin
 #   reme plugins install reme-daily-paper
 #
