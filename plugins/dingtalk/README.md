@@ -29,8 +29,8 @@ DINGTALK_CONVERSATION_IDS=cid-group-one,cid-group-two
 The repository's `cookbook` config composes DingTalk with the independently installed Auto Fin and Daily Paper plugins:
 
 ```bash
-reme plugins install reme-auto-fin
-reme plugins install reme-daily-paper
+reme plugins install plugins/auto-fin
+reme plugins install plugins/daily_paper
 reme start config=cookbook
 ```
 
