@@ -284,7 +284,7 @@ class AutoMemoryStep(BaseStep):
     ) -> tuple[list[Msg], dict[str, DataBlock], dict | None]:
         """Validate image inputs before saving, without reading or changing their sources."""
         include_images = self.context.get("include_images", False)
-        if include_images is False:
+        if include_images is not True:
             return messages, {}, None
         images = [
             (message_index, block_index, block)
