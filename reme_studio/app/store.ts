@@ -11,6 +11,7 @@ import {
 } from "./chat-stream";
 import type {
   ChatMessage,
+  ChatMode,
   MemoryGraphRoot,
   StreamChunk,
   WorkspaceTab,
@@ -21,7 +22,7 @@ import {
 } from "./workspace-persistence";
 import { markMarkdownContentSaved } from "./markdown-save";
 import {
-  bindPaSession,
+  bindChatSession,
   mergeSessionTab,
   selectPaSession,
 } from "./session-sync";
@@ -32,7 +33,7 @@ interface WorkspaceState {
   tabs: WorkspaceTab[];
   activeTabId?: string;
   openMarkdown: (path: string) => string;
-  openAgent: () => string;
+  openAgent: (mode: ChatMode) => string;
   selectPaSession: (tabId: string, sessionId: string | null) => void;
   openGraph: (root: MemoryGraphRoot) => string;
   closeTab: (id: string, discardUnsaved?: boolean) => void;
@@ -128,17 +129,20 @@ export const useWorkspaceStore = create<WorkspaceState>()(
           }));
           return id;
         },
-        openAgent: () => {
-          const existing = get().tabs.find((tab) => tab.type === "agent");
+        openAgent: (mode) => {
+          const existing =
+            mode === "pa" &&
+            get().tabs.find((tab) => tab.type === "agent" && tab.mode === "pa");
           if (existing) {
             set({ activeTabId: existing.id });
             return existing.id;
           }
-          const id = "agent";
+          const id =
+            mode === "pa" ? "agent:pa" : `agent:${crypto.randomUUID()}`;
           set((state) => ({
             tabs: [
               ...state.tabs,
-              { id, type: "agent", title: "", messages: [] },
+              { id, type: "agent", mode, title: "", messages: [] },
             ],
             activeTabId: id,
           }));
@@ -227,7 +231,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
             if (!tab.messages.some((message) => message.id === messageId))
               return tab;
             const updated = updateChatMessage(
-              bindPaSession(tab, messageId, chunk),
+              bindChatSession(tab, messageId, chunk),
               messageId,
               (message) => applyStreamChunk(message, chunk),
             );

@@ -10,8 +10,15 @@ export interface AppConfig {
   daily_dir: string;
   digest_dir: string;
   resource_dir: string;
+  jobs: Record<
+    string,
+    { backend: string; enabled: boolean; enable_serve: boolean }
+  >;
+  service: { jobs?: string[] | null };
   [key: string]: unknown;
 }
+
+export type ChatMode = "chat" | "pa";
 
 export interface ReMeComponentHealth {
   is_started?: boolean;
@@ -233,6 +240,7 @@ export type WorkspaceTab =
   | {
       id: string;
       type: "agent";
+      mode: ChatMode;
       title: string;
       sessionId?: string;
       messages: ChatMessage[];

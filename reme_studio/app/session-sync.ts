@@ -14,13 +14,14 @@ export function selectPaSession(
   return { ...tab, sessionId: sessionId ?? undefined, title: "", messages: [] };
 }
 
-/** A concurrent client may select another session before our query reaches the server. */
-export function bindPaSession(
+/** Ordinary chats retain their history; PA queries may reach a newly selected server session. */
+export function bindChatSession(
   tab: Extract<WorkspaceTab, { type: "agent" }>,
   messageId: string,
   chunk: StreamChunk,
 ) {
   if (!chunk.session_id || chunk.session_id === tab.sessionId) return tab;
+  if (tab.mode === "chat") return { ...tab, sessionId: chunk.session_id };
   const index = tab.messages.findIndex((message) => message.id === messageId);
   if (index < 0) return tab;
   const messages = tab.messages.slice(Math.max(0, index - 1), index + 1);

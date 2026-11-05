@@ -49,10 +49,13 @@ curl -N http://127.0.0.1:2333/chat \
   -d '{"query":"Summarize my long-term preferences"}'
 ```
 
-Studio uses the application-owned `pa_chat` stream with only `query`. `pa_session` takes no parameters and returns
+Studio shares one conversation UI between **Chat** and **Proactive Chat**. The default configuration exposes only
+`chat`, with `query` and an optional `session_id` for independent conversations. Start with `config=proactive` to expose
+the three `pa_*` Jobs instead of `chat`. Entries are enabled according to the service's exposed Jobs.
+
+Proactive Chat uses the application-owned `pa_chat` stream with only `query`. `pa_session` takes no parameters and returns
 `{"session_id": "...", "status": "idle"}` in `answer` (both values are null before a session exists). `pa_new_session` takes
-no parameters, creates and selects an empty session, and returns its ID in `answer` without model generation. These Jobs
-are available in `default` and `proactive`; the explicit-session `chat` Job remains available.
+no parameters, creates and selects an empty session, and returns its ID in `answer` without model generation.
 
 Start the service with `reme start config=proactive` in one terminal, then use another terminal:
 

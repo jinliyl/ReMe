@@ -157,13 +157,36 @@ export async function streamPaChat(
   signal: AbortSignal,
   onChunk: (chunk: StreamChunk) => void,
 ): Promise<void> {
-  const response = await fetch(`${REME_API_URL}/pa_chat`, {
+  return streamChatRequest("pa_chat", { query }, signal, onChunk);
+}
+
+export async function streamChat(
+  query: string,
+  sessionId: string | undefined,
+  signal: AbortSignal,
+  onChunk: (chunk: StreamChunk) => void,
+): Promise<void> {
+  return streamChatRequest(
+    "chat",
+    { query, session_id: sessionId },
+    signal,
+    onChunk,
+  );
+}
+
+async function streamChatRequest(
+  job: "chat" | "pa_chat",
+  body: { query: string; session_id?: string },
+  signal: AbortSignal,
+  onChunk: (chunk: StreamChunk) => void,
+): Promise<void> {
+  const response = await fetch(`${REME_API_URL}/${job}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "text/event-stream",
     },
-    body: JSON.stringify({ query }),
+    body: JSON.stringify(body),
     signal,
   });
   if (!response.ok || !response.body)

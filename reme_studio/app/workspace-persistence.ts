@@ -22,11 +22,16 @@ export function prepareWorkspaceSnapshot(
   tabs: WorkspaceTab[],
   activeTabId?: string,
 ): PersistedWorkspaceState {
+  const isPa = (tab: WorkspaceTab) => tab.type === "agent" && tab.mode === "pa";
   const agent =
-    tabs.find((tab) => tab.type === "agent" && tab.id === activeTabId) ??
-    tabs.find((tab) => tab.type === "agent");
+    tabs.find((tab) => isPa(tab) && tab.id === activeTabId) ?? tabs.find(isPa);
   const persistedTabs = tabs
-    .filter((tab) => tab.type !== "agent" || tab === agent)
+    .filter(
+      (tab) =>
+        tab.type !== "agent" ||
+        tab.mode === "chat" ||
+        (isPa(tab) && tab === agent),
+    )
     .map((tab): WorkspaceTab => {
       if (tab.type === "agent") {
         return {

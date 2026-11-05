@@ -256,7 +256,7 @@ async def test_agentscope_empty_session_is_persisted_resumable_and_idle(tmp_path
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("config_name", ["default", "proactive"])
-async def test_http_pa_jobs_share_configuration_and_preserve_explicit_chat(tmp_path, config_name):
+async def test_http_chat_modes_follow_the_selected_configuration(tmp_path, config_name):
     config = resolve_app_config(config=config_name, log_config=False)
     app = Application(
         workspace_dir=str(tmp_path),
@@ -264,7 +264,11 @@ async def test_http_pa_jobs_share_configuration_and_preserve_explicit_chat(tmp_p
         log_to_file=False,
         log_to_console=False,
         service={"backend": "http", "web_enabled": False, "mcp_enabled": False},
-        jobs={name: config["jobs"][name] for name in ("chat", "pa_chat", "pa_session", "pa_new_session")},
+        jobs={
+            name: config["jobs"][name]
+            for name in ("chat", "pa_chat", "pa_session", "pa_new_session")
+            if name in config["jobs"]
+        },
     )
     agent = PaAgent(app_context=app.context)
     app.context.components["agent_wrapper"] = {"default": agent}
@@ -276,6 +280,19 @@ async def test_http_pa_jobs_share_configuration_and_preserve_explicit_chat(tmp_p
             transport=httpx.ASGITransport(app=service.service),
             base_url="http://test",
         ) as client:
+            if config_name == "default":
+                assert "chat" in config["jobs"]
+                for name in ("pa_chat", "pa_session", "pa_new_session"):
+                    assert name not in config["jobs"]
+                    assert (await client.post(f"/{name}", json={})).status_code == 404
+                response = await client.post("/chat", json={"query": "hello", "session_id": "explicit-session"})
+                assert response.headers["content-type"].startswith("text/event-stream")
+                assert "data:[DONE]" in response.text
+                assert agent.calls[-1][1]["resume"] == "explicit-session"
+                assert not agent.created and "pa" not in app.context.metadata
+                return
+            assert "chat" not in config["jobs"]
+            assert (await client.post("/chat", json={"query": "hello"})).status_code == 404
             current = (await client.post("/pa_session", json={})).json()
             assert current["success"] and current["answer"] == {"session_id": None, "status": None}
             new = (await client.post("/pa_new_session", json={})).json()
@@ -287,7 +304,4 @@ async def test_http_pa_jobs_share_configuration_and_preserve_explicit_chat(tmp_p
             assert agent.created[0] == {key: value for key, value in agent.calls[0][1].items() if key != "resume"}
             forbidden = (await client.post("/pa_new_session", json={"session_id": "other"})).json()
             assert not forbidden["success"]
-            assert (await client.post("/pa_session", json={})).json()["answer"]["session_id"] == "session-1"
-            await client.post("/chat", json={"query": "independent", "session_id": "explicit-session"})
-            assert agent.calls[-1][1]["resume"] == "explicit-session"
             assert (await client.post("/pa_session", json={})).json()["answer"]["session_id"] == "session-1"

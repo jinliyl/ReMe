@@ -43,6 +43,10 @@ export async function getAppConfig(): Promise<AppConfig> {
     daily_dir: "daily",
     digest_dir: "digest",
     resource_dir: "resources",
+    service: {},
+    jobs: {
+      chat: { backend: "stream", enabled: true, enable_serve: true },
+    },
   };
 }
 
@@ -137,4 +141,13 @@ export async function streamPaChat(
   }
   emit("reply_end", "");
   emit("done", "");
+}
+
+export async function streamChat(
+  query: string,
+  _sessionId: string | undefined,
+  signal: AbortSignal,
+  onChunk: (chunk: StreamChunk) => void,
+) {
+  return streamPaChat(query, signal, onChunk);
 }

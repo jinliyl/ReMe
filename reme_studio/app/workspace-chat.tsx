@@ -13,17 +13,21 @@ import {
   getPaSession,
   newPaSession,
   readChatSession,
+  streamChat,
   streamPaChat,
 } from "./api";
 import { chatStreamError, formatStreamPayloads } from "./chat-stream";
+import { isChatAvailable, isJobAvailable } from "./chat-modes";
 import { useI18n } from "./i18n";
 import { useWorkspaceStore } from "./store";
 import { IS_DEMO } from "./studio-mode";
 import type {
   ChatBlock,
+  AppConfig,
   ChatMessage,
   DetailBlock,
   PaSession,
+  StreamChunk,
   WorkspaceTab,
 } from "./types";
 import {
@@ -149,11 +153,17 @@ function ChatBlockView({
 export default function Chat({
   tab,
   active,
+  config,
 }: {
   tab: Extract<WorkspaceTab, { type: "agent" }>;
   active: boolean;
+  config?: AppConfig;
 }) {
   const { language, t } = useI18n();
+  const proactive = tab.mode === "pa";
+  const available = isChatAvailable(config, tab.mode);
+  const historySessionId = proactive ? undefined : tab.sessionId;
+  const canReadHistory = isJobAvailable(config, "session_read", "base");
   const [input, setInput] = useState("");
   const [fileDragOver, setFileDragOver] = useState(false);
   const [syncError, setSyncError] = useState("");
@@ -167,6 +177,7 @@ export default function Chat({
     toggleChatBlock,
     finishChat,
     selectPaSession,
+    openAgent,
   } = useWorkspaceStore();
 
   useEffect(() => {
@@ -175,22 +186,41 @@ export default function Chat({
   useEffect(() => () => controller.current?.abort(), []);
 
   useEffect(() => {
-    if (IS_DEMO || !active || tab.streaming || switching) return;
+    if (
+      IS_DEMO ||
+      !available ||
+      !active ||
+      tab.streaming ||
+      switching ||
+      (!proactive && (!historySessionId || !canReadHistory))
+    )
+      return;
     let stopped = false;
-    let historyAvailable = true;
+    let historyAvailable = canReadHistory;
     let pending = false;
     let timer: ReturnType<typeof setTimeout>;
     let request: AbortController | undefined;
     const refresh = async () => {
-      if (stopped || pending || document.visibilityState !== "visible") return;
+      if (
+        stopped ||
+        pending ||
+        (!proactive && !historyAvailable) ||
+        document.visibilityState !== "visible"
+      )
+        return;
       pending = true;
       request = new AbortController();
       try {
-        const currentSession = await getPaSession(request.signal);
+        const currentSession: PaSession = proactive
+          ? await getPaSession(request.signal)
+          : { session_id: historySessionId ?? null, status: null };
         if (stopped || request.signal.aborted) return;
-        const store = useWorkspaceStore.getState();
-        store.selectPaSession(tab.id, currentSession.session_id);
-        setSession(currentSession);
+        if (proactive) {
+          useWorkspaceStore
+            .getState()
+            .selectPaSession(tab.id, currentSession.session_id);
+          setSession(currentSession);
+        }
         if (currentSession.session_id && historyAvailable) {
           const current = useWorkspaceStore
             .getState()
@@ -214,7 +244,7 @@ export default function Chat({
           setSyncError(error instanceof Error ? error.message : String(error));
       } finally {
         pending = false;
-        if (!stopped) {
+        if (!stopped && (proactive || historyAvailable)) {
           clearTimeout(timer);
           timer = setTimeout(() => void refresh(), 5000);
         }
@@ -235,15 +265,28 @@ export default function Chat({
       window.removeEventListener("focus", onVisible);
       document.removeEventListener("visibilitychange", onVisible);
     };
-  }, [active, tab.id, tab.streaming, switching]);
+  }, [
+    active,
+    available,
+    proactive,
+    historySessionId,
+    canReadHistory,
+    tab.id,
+    tab.streaming,
+    switching,
+  ]);
 
-  const ready = IS_DEMO || session !== undefined;
+  const ready = available && (!proactive || IS_DEMO || session !== undefined);
   const busy = Boolean(
-    tab.streaming || switching || session?.status === "active",
+    tab.streaming || switching || (proactive && session?.status === "active"),
   );
   const canSend = ready && !busy && session?.status !== "error";
   const startNewSession = async () => {
     if (!ready || busy || controller.current) return;
+    if (!proactive) {
+      openAgent("chat");
+      return;
+    }
     const request = new AbortController();
     controller.current = request;
     setSwitching(true);
@@ -296,10 +339,13 @@ export default function Chat({
     const requestController = new AbortController();
     controller.current = requestController;
     const error = await chatStreamError(
-      () =>
-        streamPaChat(query, requestController.signal, (chunk) =>
-          applyChatChunk(tab.id, assistant.id, chunk),
-        ),
+      () => {
+        const onChunk = (chunk: StreamChunk) =>
+          applyChatChunk(tab.id, assistant.id, chunk);
+        return proactive
+          ? streamPaChat(query, requestController.signal, onChunk)
+          : streamChat(query, tab.sessionId, requestController.signal, onChunk);
+      },
       requestController.signal,
       t("chatFailed"),
     );
@@ -311,10 +357,12 @@ export default function Chat({
     <div className="chat" style={active ? undefined : { display: "none" }}>
       <div className="chat-session">
         <div>
-          <strong>{t("currentConversation")}</strong>
+          <strong>{t(proactive ? "paChat" : "chatTab")}</strong>
           <span role="status">
             {t(
-              busy
+              !available && config
+                ? "chatNotEnabled"
+                : busy
                 ? "streaming"
                 : session?.status === "error"
                 ? "sessionUnavailable"
@@ -333,8 +381,16 @@ export default function Chat({
         {!tab.messages.length && (
           <div className="chat-empty">
             <div className="agent-logo" aria-hidden="true" />
-            <h1>{t("chatTitle")}</h1>
-            <p>{t(IS_DEMO ? "demoChatDescription" : "chatDescription")}</p>
+            <h1>{t(proactive ? "paChat" : "chatTitle")}</h1>
+            <p>
+              {t(
+                IS_DEMO
+                  ? "demoChatDescription"
+                  : proactive
+                  ? "paChatDescription"
+                  : "chatDescription",
+              )}
+            </p>
             {suggestions}
           </div>
         )}
@@ -395,6 +451,11 @@ export default function Chat({
         {IS_DEMO && tab.messages.length > 0 && suggestions}
         <div ref={endRef} />
       </div>
+      {!available && config && (
+        <div className="session-sync-error" role="status">
+          {t(proactive ? "paChatSetup" : "chatNotEnabled")}
+        </div>
+      )}
       {syncError && (
         <div className="session-sync-error" role="status">
           {t("sessionSyncFailed")}: {syncError}
@@ -423,6 +484,7 @@ export default function Chat({
       >
         <div>
           <textarea
+            disabled={!available}
             value={input}
             onChange={(event) => setInput(event.target.value)}
             placeholder={t("askWorkspace")}
