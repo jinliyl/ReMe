@@ -1,7 +1,60 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { applyStreamChunk } from "../app/chat-stream.ts";
-import { mergeSessionMessages, mergeSessionTab } from "../app/session-sync.ts";
+import {
+  bindPaSession,
+  mergeSessionMessages,
+  mergeSessionTab,
+  selectPaSession,
+} from "../app/session-sync.ts";
+
+test("the server selection clears another session and leaves a live local stream alone", () => {
+  const tab = {
+    id: "agent",
+    type: "agent",
+    title: "old",
+    sessionId: "old",
+    messages: [{ id: "old" }],
+  };
+  assert.equal(selectPaSession(tab, "old"), tab);
+  assert.deepEqual(selectPaSession(tab, "new"), {
+    ...tab,
+    title: "",
+    sessionId: "new",
+    messages: [],
+  });
+  assert.equal(
+    selectPaSession({ ...tab, streaming: true }, "new").sessionId,
+    "old",
+  );
+  assert.equal(selectPaSession(tab, null).sessionId, undefined);
+});
+
+test("a query routed to a changed current session keeps only its own turn", () => {
+  const tab = {
+    id: "agent",
+    type: "agent",
+    sessionId: "old",
+    title: "old",
+    streaming: true,
+    messages: [
+      { id: "old-answer", role: "assistant", content: "old context" },
+      { id: "user", role: "user", content: "new query" },
+      { id: "answer", role: "assistant", content: "" },
+    ],
+  };
+  const updated = bindPaSession(tab, "answer", { session_id: "new" });
+  assert.equal(updated.sessionId, "new");
+  assert.equal(updated.title, "new query");
+  assert.deepEqual(
+    updated.messages.map((message) => message.id),
+    ["user", "answer"],
+  );
+  assert.equal(
+    bindPaSession(tab, "closed-request", { session_id: "new" }),
+    tab,
+  );
+});
 
 const entry = (id, role, content, extra = {}) => ({
   id,

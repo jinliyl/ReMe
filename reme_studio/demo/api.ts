@@ -49,6 +49,12 @@ export async function getAppConfig(): Promise<AppConfig> {
 export async function readChatSession() {
   return undefined;
 }
+export async function getPaSession() {
+  return { session_id: null, status: null };
+}
+export async function newPaSession() {
+  return crypto.randomUUID();
+}
 export async function listWorkspaceFiles(extensions: string[]) {
   return {
     paths: Object.keys(demoWorkspace().files()).filter((path) =>
@@ -72,9 +78,8 @@ export async function saveWorkspaceFile(
 export async function getGraphSnapshot() {
   return demoWorkspace().graph();
 }
-export async function streamChat(
+export async function streamPaChat(
   query: string,
-  _sessionId: string | undefined,
   signal: AbortSignal,
   onChunk: (chunk: StreamChunk) => void,
 ) {

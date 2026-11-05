@@ -340,6 +340,42 @@ jobs:
       - backend: chat_step
         agent_wrapper: default
 
+  pa_chat:
+    backend: stream
+    description: "Stream a message through the application's current agent session."
+    parameters:
+      type: object
+      additionalProperties: false
+      properties:
+        query: {type: string, minLength: 1, description: "user message"}
+      required: [query]
+    steps:
+      - &pa_options
+        backend: pa_chat_step
+        agent_wrapper: default
+
+  pa_session:
+    backend: base
+    description: "Return the current agent session ID and activity status; does not create a session."
+    parameters:
+      type: object
+      properties: {}
+      additionalProperties: false
+    steps:
+      - backend: pa_session_step
+        agent_wrapper: default
+
+  pa_new_session:
+    backend: base
+    description: "Create and select an empty agent session; return its ID without generating a reply."
+    parameters:
+      type: object
+      properties: {}
+      additionalProperties: false
+    steps:
+      - <<: *pa_options
+        backend: pa_new_session_step
+
   health_check:
     backend: base
     description: "return a concise health-check snapshot of reme components"

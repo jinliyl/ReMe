@@ -94,3 +94,24 @@ test("workspace snapshot preserves an open memory graph", () => {
   assert.deepEqual(snapshot.tabs, [graph]);
   assert.equal(snapshot.activeTabId, graph.id);
 });
+
+test("workspace restoration keeps one current Agent view and preserves file drafts", () => {
+  const draft = {
+    id: "draft",
+    type: "markdown",
+    path: "draft.md",
+    content: "unsaved",
+    savedContent: "",
+  };
+  const agent = (id) => ({ id, type: "agent", title: "", messages: [] });
+  const snapshot = prepareWorkspaceSnapshot(
+    [draft, agent("one"), agent("two")],
+    "two",
+  );
+  assert.deepEqual(
+    snapshot.tabs.map((tab) => tab.id),
+    ["draft", "two"],
+  );
+  assert.equal(snapshot.tabs[0].content, "unsaved");
+  assert.equal(snapshot.activeTabId, "two");
+});

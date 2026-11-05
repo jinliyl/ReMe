@@ -180,10 +180,16 @@ Chat 会在同一个标签工作区中打开，因此对话进行时仍可保留
 - ReMe Agent 逐 token 流式输出。
 - 分别展示回答文本、推理、工具调用、结构化数据、审批和用量信息。
 - 自动折叠已经完成的推理和工具块，让长对话更易阅读。
-- 多个独立对话标签页和可恢复的后端 session id。
+- 一个当前 Agent 对话，以及独立的**新对话**操作。
 - 常见记忆问题的起始提示。
 - 将工作区文件拖入输入框以插入路径引用。
 - 按 `Enter` 发送，按 `Shift+Enter` 换行。
+
+Studio 使用同一 Application 下所有客户端共享的当前对话。发送消息调用 `pa_chat(query)`；`pa_session()` 返回
+包含 `session_id` 和 `status` 的字典；`pa_new_session()` 创建并切换到空会话，返回新 ID，不触发模型生成。
+点击**新对话**只更换对话上下文，工作区长期记忆继续保留。生成期间拒绝并发发送和新建，但仍可查询状态。
+当前会话指针保存在 ApplicationContext，服务重启后清空；浏览器缓存仅用于展示，不能决定后端使用哪个会话。
+AgentScope 和 Codex 支持创建空会话；完整服务端历史读取目前需要 Codex。独立的 `chat` Job 继续保留，供调用方显式指定 session ID。
 
 内置 chat job 对工作区只读：它可以搜索和读取上下文，但不应替代明确保存长期知识的操作。Agent 对话需要有效的 Agent/模型配置；文件浏览、编辑、图谱和服务检查不需要模型。
 
@@ -196,10 +202,11 @@ Chat 会在同一个标签工作区中打开，因此对话进行时仍可保留
 reme start config=proactive
 ```
 
-在另一个终端中，使用对话对应的 session id 调用：
+在另一个终端中查询或新建当前会话，再用返回的 session id 读取历史、追加主动消息：
 
 ```bash
-reme session_status session_id=SESSION_ID
+reme pa_session
+reme pa_new_session
 reme session_append session_id=SESSION_ID message_id=reminder-1 content="主人，这条信息可能与你有关。" wait_timeout=30
 reme session_read session_id=SESSION_ID
 ```

@@ -203,6 +203,11 @@ export interface SessionMessage {
   chunks: StreamChunk[];
 }
 
+export interface PaSession {
+  session_id: string | null;
+  status: "active" | "idle" | "not_loaded" | "error" | null;
+}
+
 export interface SessionSnapshot {
   session_id: string;
   state: {

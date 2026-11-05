@@ -281,7 +281,7 @@ export default function FilesNavigator({
             className="chat-tab"
             role="tab"
             aria-selected={false}
-            aria-label={t("newAgentChat")}
+            aria-label={t("openAgentChat")}
             onClick={openAgent}
           >
             <MessageSquarePlus size={13} />

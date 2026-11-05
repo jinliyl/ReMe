@@ -30,7 +30,7 @@ test("server-renders the ReMe Studio shell", async () => {
     html.replaceAll("<!-- -->", ""),
     new RegExp(`v${packageJson.version}`),
   );
-  assert.match(html, /新建 Agent 对话/);
+  assert.match(html, /打开 Agent 对话/);
   assert.match(html, /文件保留在你的本地工作区/);
   assert.doesNotMatch(
     html,

@@ -84,7 +84,7 @@ export default function Tabs() {
                   ? tab.path.split("/").slice(-2).join("/")
                   : tab.type === "graph"
                   ? `${tab.root} · ${t("memoryGraphShort")}`
-                  : tab.title || t("newConversation")}
+                  : tab.title || t("currentConversation")}
               </span>
               {dirty ? (
                 <i className="dirty" />
