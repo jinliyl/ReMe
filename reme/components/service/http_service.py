@@ -20,6 +20,7 @@ from ...constants import REME_DEFAULT_HOST, REME_DEFAULT_PORT
 from ...schema import Request, Response
 from ...utils import execute_stream_task, resolve_web_static_dir
 from .mcp_tools import add_mcp_job
+from .http_auth import HttpAccessMiddleware, HttpAuthConfig
 
 if TYPE_CHECKING:
     from ...application import Application
@@ -48,6 +49,9 @@ class HttpService(BaseService):
         mcp_stateless_http: bool = False,
         injected_job_kwargs: dict[str, Any] | None = None,
         tool_error_on_failure: bool = False,
+        auth: dict | HttpAuthConfig | None = None,
+        mount_agent_tools: bool = True,
+        max_request_bytes: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -60,6 +64,13 @@ class HttpService(BaseService):
         self.mcp_stateless_http = mcp_stateless_http
         self.injected_job_kwargs = dict(injected_job_kwargs or {})
         self.tool_error_on_failure = tool_error_on_failure
+        self.auth = auth if isinstance(auth, HttpAuthConfig) else HttpAuthConfig.model_validate(auth or {})
+        if max_request_bytes is not None and (type(max_request_bytes) is not int or max_request_bytes < 1):
+            raise ValueError("max_request_bytes must be a positive integer")
+        if self.auth.enabled and mount_agent_tools:
+            raise ValueError("Authenticated HTTP services must set mount_agent_tools=false")
+        self.mount_agent_tools = mount_agent_tools
+        self.max_request_bytes = max_request_bytes
         self.mcp_server = None
         self.mcp_app = None
 
@@ -71,6 +82,8 @@ class HttpService(BaseService):
 
         lifespan = self._lifespan(app, self.host, self.port)
         servers = self.app_context.components.get("codex_app_server", {}) if self.app_context else {}
+        if not self.mount_agent_tools:
+            servers = {}
         # TLS listeners may use certificates that cannot be verified through a loopback address.
         if self.kwargs.get("ssl_certfile") or self.kwargs.get("ssl_keyfile"):
             servers = {}
@@ -88,6 +101,11 @@ class HttpService(BaseService):
         self.service = FastAPI(
             title=app.config.app_name,
             lifespan=lifespan,
+        )
+        self.service.add_middleware(
+            HttpAccessMiddleware,
+            auth=self.auth,
+            max_request_bytes=self.max_request_bytes,
         )
         for server in servers.values():
             gateway = server.jobs_mcp
@@ -228,11 +246,20 @@ class HttpService(BaseService):
             raise ValueError(f"mcp_path conflicts with reserved HTTP path {path!r}")
         return path
 
+    def _request_data(self, job: BaseJob, request: Request) -> dict:
+        """Keep authenticated public callers outside framework injection fields."""
+        if not self.auth.enabled:
+            return request.model_dump(exclude_none=True)
+        data = request.model_dump(exclude_unset=True)
+        if set(data) - set(job.parameters.get("properties", {})):
+            raise HTTPException(status_code=422, detail="Unexpected request fields")
+        return data
+
     def _add_json_job(self, job: BaseJob) -> None:
         """Register a job as POST /{job.name} returning a JSON Response."""
 
         async def endpoint(request: Request) -> Response:
-            return await job(**request.model_dump(exclude_none=True))
+            return await job(**self._request_data(job, request))
 
         self.service.post(
             f"/{job.name}",
@@ -246,7 +273,7 @@ class HttpService(BaseService):
         async def endpoint(request: Request) -> StreamingResponse:
             stream_queue: asyncio.Queue = asyncio.Queue(maxsize=job.stream_queue_size)
             task = asyncio.create_task(
-                job(stream_queue=stream_queue, **request.model_dump(exclude_none=True)),
+                job(stream_queue=stream_queue, **self._request_data(job, request)),
             )
 
             async def body() -> AsyncGenerator[bytes, None]:

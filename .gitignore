@@ -90,3 +90,11 @@ daily/
 # Desktop generated output
 reme_desktop/out/
 reme_desktop/reports/
+
+# Android machine-local state and artifacts
+reme_android/.gradle/
+reme_android/.kotlin/
+reme_android/local.properties
+reme_android/captures/
+*.apk
+*.aab

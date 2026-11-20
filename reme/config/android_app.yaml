@@ -1,0 +1,487 @@
+# Start with an environment-provided ANDROID_APP_TOKEN; keep credentials outside the workspace.
+app_name: ReMe Voice Diary
+language: zh
+workspace_dir: ${ANDROID_WORKSPACE_DIR:-~/.reme-android}
+service:
+  backend: http
+  host: 127.0.0.1
+  port: 2333
+  web_enabled: false
+  mcp_enabled: false
+  mount_agent_tools: false
+  auth:
+    enabled: true
+    token: ${ANDROID_APP_TOKEN}
+  max_request_bytes: 12582912
+  jobs:
+  - android_connect
+  - android_capture
+  - android_events
+  - android_read
+  - android_update
+  - android_sync
+  - android_tts
+  - android_ack
+jobs:
+  android_connect:
+    backend: base
+    parameters:
+      additionalProperties: false
+      properties:
+        device_id:
+          pattern: ^[a-zA-Z0-9_-]{1,80}$
+          title: Device Id
+          type: string
+        protocol_version:
+          const: 1
+          default: 1
+          title: Protocol Version
+          type: integer
+      required:
+      - device_id
+      title: Connect
+      type: object
+    steps:
+    - backend: android_connect_step
+  android_capture:
+    backend: base
+    parameters:
+      additionalProperties: false
+      properties:
+        capture_id:
+          pattern: ^[a-zA-Z0-9_-]{1,80}$
+          title: Capture Id
+          type: string
+        captured_at:
+          format: date-time
+          title: Captured At
+          type: string
+        timezone:
+          default: Asia/Shanghai
+          title: Timezone
+          type: string
+        kind:
+          default: text
+          enum:
+          - text
+          - audio
+          - share
+          title: Kind
+          type: string
+        text:
+          anyOf:
+          - maxLength: 20000
+            type: string
+          - type: 'null'
+          default: null
+          title: Text
+        audio:
+          anyOf:
+          - maxLength: 12582912
+            type: string
+          - type: 'null'
+          default: null
+          title: Audio
+        audio_format:
+          const: wav
+          default: wav
+          title: Audio Format
+          type: string
+        sample_rate:
+          const: 16000
+          default: 16000
+          title: Sample Rate
+          type: integer
+        target_kind:
+          default: general
+          enum:
+          - general
+          - idea
+          - task
+          title: Target Kind
+          type: string
+        target_id:
+          anyOf:
+          - pattern: ^[a-zA-Z0-9_-]{1,80}$
+            type: string
+          - type: 'null'
+          default: null
+          title: Target Id
+      required:
+      - capture_id
+      - captured_at
+      title: Capture
+      type: object
+    steps:
+    - backend: android_capture_step
+  android_events:
+    backend: stream
+    parameters:
+      additionalProperties: false
+      properties:
+        run_id:
+          pattern: ^[a-zA-Z0-9_-]{1,80}$
+          title: Run Id
+          type: string
+      required:
+      - run_id
+      title: Events
+      type: object
+    steps:
+    - backend: android_events_step
+  android_read:
+    backend: base
+    parameters:
+      additionalProperties: false
+      properties:
+        kind:
+          enum:
+          - journal
+          - task
+          - idea
+          - run
+          - conversation
+          - research
+          - resource
+          title: Kind
+          type: string
+        id:
+          anyOf:
+          - pattern: ^[a-zA-Z0-9_-]{1,80}$
+            type: string
+          - type: 'null'
+          default: null
+          title: Id
+        date:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          default: null
+          title: Date
+        offset:
+          default: 0
+          minimum: 0
+          title: Offset
+          type: integer
+        limit:
+          default: 30
+          maximum: 100
+          minimum: 1
+          title: Limit
+          type: integer
+      required:
+      - kind
+      title: Read
+      type: object
+    steps:
+    - backend: android_read_step
+  android_update:
+    backend: base
+    parameters:
+      additionalProperties: false
+      properties:
+        operation_id:
+          pattern: ^[a-zA-Z0-9_-]{1,80}$
+          title: Operation Id
+          type: string
+        kind:
+          enum:
+          - task
+          - idea
+          - run
+          title: Kind
+          type: string
+        id:
+          pattern: ^[a-zA-Z0-9_-]{1,80}$
+          title: Id
+          type: string
+        action:
+          enum:
+          - complete
+          - cancel
+          - reopen
+          - reschedule
+          - pause
+          - resume
+          - correct
+          - retry
+          title: Action
+          type: string
+        expected_revision:
+          minimum: 1
+          title: Expected Revision
+          type: integer
+        text:
+          anyOf:
+          - maxLength: 20000
+            type: string
+          - type: 'null'
+          default: null
+          title: Text
+        scheduled_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          title: Scheduled At
+        due_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          title: Due At
+        remind_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          title: Remind At
+      required:
+      - operation_id
+      - kind
+      - id
+      - action
+      - expected_revision
+      title: Update
+      type: object
+    steps:
+    - backend: android_update_step
+  android_sync:
+    backend: base
+    parameters:
+      additionalProperties: false
+      properties:
+        device_id:
+          pattern: ^[a-zA-Z0-9_-]{1,80}$
+          title: Device Id
+          type: string
+        cursor:
+          anyOf:
+          - maxLength: 200
+            type: string
+          - type: 'null'
+          default: null
+          title: Cursor
+        limit:
+          default: 100
+          maximum: 100
+          minimum: 1
+          title: Limit
+          type: integer
+      required:
+      - device_id
+      title: Sync
+      type: object
+    steps:
+    - backend: android_sync_step
+  android_tts:
+    backend: base
+    parameters:
+      additionalProperties: false
+      properties:
+        run_id:
+          pattern: ^[a-zA-Z0-9_-]{1,80}$
+          title: Run Id
+          type: string
+        message_id:
+          pattern: ^[a-zA-Z0-9_-]{1,80}$
+          title: Message Id
+          type: string
+        voice:
+          anyOf:
+          - maxLength: 80
+            type: string
+          - type: 'null'
+          default: null
+          title: Voice
+      required:
+      - run_id
+      - message_id
+      title: Speech
+      type: object
+    steps:
+    - backend: android_tts_step
+  android_ack:
+    backend: base
+    parameters:
+      additionalProperties: false
+      properties:
+        operation_id:
+          pattern: ^[a-zA-Z0-9_-]{1,80}$
+          title: Operation Id
+          type: string
+        device_id:
+          pattern: ^[a-zA-Z0-9_-]{1,80}$
+          title: Device Id
+          type: string
+        reminder_id:
+          maxLength: 250
+          minLength: 1
+          title: Reminder Id
+          type: string
+        state:
+          enum:
+          - synced
+          - registered
+          - posted
+          - read
+          title: State
+          type: string
+      required:
+      - operation_id
+      - device_id
+      - reminder_id
+      - state
+      title: Ack
+      type: object
+    steps:
+    - backend: android_ack_step
+  android_loop:
+    backend: background
+    track_execution: false
+    steps:
+    - backend: android_loop_step
+  android_run:
+    backend: base
+    enable_serve: false
+    steps:
+    - backend: android_run_step
+      timeout_seconds: 300
+      max_research_per_day: 3
+  web_extract:
+    backend: base
+    description: Read a known HTTP(S) URL (text or PDF, up to 20 MiB by default).
+      Save complete files under resource_dir; return workspace-relative paths, source
+      metadata and a bounded text preview. Read saved files for full content. HTML
+      source is preserved without executing JavaScript. PDFs are downloaded without
+      text extraction.
+    parameters:
+      type: object
+      additionalProperties: false
+      properties:
+        url:
+          type: string
+          minLength: 1
+          maxLength: 4096
+          description: HTTP or HTTPS URL to read
+        max_chars:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          default: 3000
+          description: Preview character limit; also bounded by the tool output budget
+      required:
+      - url
+    steps:
+    - backend: web_extract_step
+    enable_serve: false
+components:
+  asr:
+    default:
+      backend: dashscope
+      api_key: ${DASHSCOPE_API_KEY:-}
+      base_url: https://dashscope.aliyuncs.com/api/v1
+      model: qwen-audio-3.1-asr-flash
+      timeout: 60
+  tts:
+    default:
+      backend: dashscope
+      api_key: ${DASHSCOPE_API_KEY:-}
+      base_url: https://dashscope.aliyuncs.com/api/v1
+      model: qwen-audio-3.1-tts-plus
+      voice: longanhuan_v3.1
+      audio_format: mp3
+      sample_rate: 22050
+      timeout: 60
+  event_stream:
+    default:
+      backend: agent
+  agent_runtime:
+    default:
+      backend: local
+      agent_wrapper: default
+      event_stream: default
+      chat:
+        description: 用户的语音日记、待办和持续想法。
+      agents:
+      - name: diary
+        trigger_type: event
+        description: 关联用户历史记录，整理日记、行动任务和想法，保留原始材料与用户决定。
+      - name: idea_research
+        trigger_type: cron
+        cron: '*/30 * * * *'
+        description: 有边界地预研新增想法，整理证据和待讨论问题；同一输入版本不重复研究。
+      inbox:
+        p0_delay_seconds: 0
+        p1_idle_seconds: 10
+        p2_idle_seconds: 1800
+  codex_app_server:
+    default:
+      backend: sdk
+      auth_mode: api_key
+      api_key: ${LLM_API_KEY:-}
+      base_url: ${LLM_BASE_URL:-}
+      codex_home: .codex
+      supports_websockets: false
+      experimental_api: true
+      config_overrides:
+      - model_context_window=983616
+      - model_auto_compact_token_limit=600000
+      - model_auto_compact_token_limit_scope="total"
+      - model_post_turn_compact_threshold_percent=0
+      - features.async_compaction=false
+      - tool_output_token_limit=2500
+      - model="${CODEX_MODEL_NAME:-qwen3.8-max}"
+      - review_model="${CODEX_MODEL_NAME:-qwen3.8-max}"
+      - features.memories=false
+      model_catalog:
+        models:
+        - slug: ${CODEX_MODEL_NAME:-qwen3.8-max}
+          display_name: Qwen3.8 Max
+          description: Work and life assistant with text and image input
+          base_instructions: ''
+          default_reasoning_level: xhigh
+          supported_reasoning_levels:
+          - effort: none
+            description: Disable thinking
+          - effort: low
+            description: Light reasoning
+          - effort: medium
+            description: Balanced reasoning
+          - effort: xhigh
+            description: Maximum reasoning
+          context_window: 983616
+          max_context_window: 983616
+          effective_context_window_percent: 95
+          input_modalities:
+          - text
+          - image
+          supports_reasoning_summary_parameter: false
+          supports_reasoning_summaries: false
+          supports_parallel_tool_calls: false
+          support_verbosity: false
+          shell_type: unified_exec
+          visibility: list
+          supported_in_api: true
+          priority: 0
+          experimental_supported_tools: []
+          truncation_policy:
+            mode: bytes
+            limit: 10000
+          model_messages:
+            instructions_template: ''
+  agent_wrapper:
+    default:
+      backend: codex
+      app_server: default
+      project_path: ..
+      cwd: .
+      skills: []
+      model: ${CODEX_MODEL_NAME:-qwen3.8-max}
+      effort: ${ANDROID_MODEL_EFFORT:-medium}
+      approval_mode: deny_all
+      sandbox: read-only

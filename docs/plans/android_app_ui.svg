@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="1080" viewBox="0 0 1680 1080" role="img" aria-labelledby="title desc">
+<title id="title">Android 语音日记界面设计</title><desc id="desc">四个原生手机页面设计示意：语音首页、录音状态、待办列表和待讨论的想法。图中内容为示例，展示纸白、松绿和暖色视觉规范。</desc>
+<defs><filter id="shadow" x="-25%" y="-15%" width="150%" height="140%"><feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#22372B" flood-opacity="0.10"/></filter></defs>
+<g font-family="PingFang SC, Noto Sans CJK SC, Microsoft YaHei, sans-serif">
+<rect x="0" y="0" width="1680" height="1080" rx="0" fill="#EBEEE7"/>
+<text x="64" y="51" font-size="12" fill="#596A63" font-weight="600" text-anchor="start">ANDROID  /  VOICE JOURNAL</text>
+<text x="64" y="99" font-size="32" fill="#1E2A28" font-weight="650" text-anchor="start">Android 语音日记界面设计</text>
+<text x="1616" y="97" font-size="13" fill="#596A63" font-weight="400" text-anchor="end">原生界面 · 设计示意 · 示例内容</text>
+<text x="64" y="151" font-size="16" fill="#596A63" font-weight="600" text-anchor="start">01  对话首页</text>
+<g transform="translate(64,174)">
+<rect x="-6" y="-6" width="362" height="804" rx="43" fill="#DCE2DA" filter="url(#shadow)"/>
+<rect x="0" y="0" width="350" height="792" rx="38" fill="#F7F5F0"/>
+<text x="27" y="32" font-size="13" fill="#1E2A28" font-weight="600" text-anchor="start">9:41</text>
+<rect x="283" y="27" width="3" height="4" rx="1" fill="#1E2A28"/>
+<rect x="288" y="24" width="3" height="7" rx="1" fill="#1E2A28"/>
+<rect x="293" y="21" width="3" height="10" rx="1" fill="#1E2A28"/>
+<rect x="298" y="18" width="3" height="13" rx="1" fill="#1E2A28"/>
+<rect x="310" y="19" width="19" height="10" rx="3" fill="none" stroke="#1E2A28"/>
+<rect x="313" y="22" width="13" height="4" rx="1" fill="#1E2A28"/>
+<circle cx="175" cy="24" r="7" fill="#1E2A28"/>
+<text x="24" y="79" font-size="13" fill="#596A63" font-weight="400" text-anchor="start">11 月 15 日  星期日</text>
+<circle cx="311" cy="74" r="15" fill="#E5EEE8"/>
+<text x="311" y="79" font-size="12" fill="#2C6E62" font-weight="600" text-anchor="middle">记</text>
+<text x="24" y="132" font-size="30" fill="#1E2A28" font-weight="650" text-anchor="start">今天，</text>
+<text x="24" y="174" font-size="30" fill="#1E2A28" font-weight="650" text-anchor="start">想聊点什么？</text>
+<text x="24" y="207" font-size="15" fill="#596A63" font-weight="400" text-anchor="start">让想法先被听见，再慢慢整理。</text>
+<rect x="24" y="235" width="84" height="28" rx="14" fill="#E5EEE8"/>
+<text x="66.0" y="254" font-size="12" fill="#2C6E62" font-weight="600" text-anchor="middle">服务已连接</text>
+<rect x="24" y="291" width="302" height="122" rx="24" fill="#FFFFFF"/>
+<text x="43" y="319" font-size="12" fill="#596A63" font-weight="400" text-anchor="start">上次，我们聊到</text>
+<text x="43" y="350" font-size="18" fill="#1E2A28" font-weight="600" text-anchor="start">做一个更懂你的日记本</text>
+<text x="43" y="380" font-size="13" fill="#596A63" font-weight="400" text-anchor="start">关联了 3 条历史记录</text>
+<text x="303" y="353" font-size="22" fill="#2C6E62" font-weight="400" text-anchor="end">↗</text>
+<circle cx="175" cy="509" r="67" fill="#E5EEE8"/>
+<circle cx="175" cy="509" r="48" fill="#2C6E62"/>
+<g transform="translate(175,505) scale(1.3)" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"><rect x="-5" y="-12" width="10" height="17" rx="5"/><path d="M-10 0v2a10 10 0 0 0 20 0V0M0 12v6M-5 18H5"/></g>
+<text x="175" y="599" font-size="16" fill="#1E2A28" font-weight="600" text-anchor="middle">点击，说说你的想法</text>
+<text x="175" y="627" font-size="12" fill="#596A63" font-weight="400" text-anchor="middle">也可以输入文字或分享一篇文章</text>
+<rect x="84" y="651" width="182" height="28" rx="14" fill="#F2E7DA"/>
+<text x="175.0" y="670" font-size="12" fill="#855939" font-weight="600" text-anchor="middle">有 2 个想法准备好讨论了</text>
+<path d="M20 701L330 701" stroke="#E7EAE4" stroke-width="1" fill="none" stroke-linecap="round"/>
+<rect x="24" y="713" width="56" height="33" rx="16" fill="#E5EEE8"/>
+<path d="M43 722h18v12h-8l-6 4v-4h-4z" fill="none" stroke="#2C6E62" stroke-width="1.7" stroke-linejoin="round"/>
+<text x="52" y="766" font-size="12" fill="#2C6E62" font-weight="600" text-anchor="middle">对话</text>
+<path d="M126 720h16v18h-16zM130 725h8M130 730h8" fill="none" stroke="#78867E" stroke-width="1.7" stroke-linejoin="round"/>
+<text x="134" y="766" font-size="12" fill="#78867E" font-weight="400" text-anchor="middle">日记</text>
+<path d="M207 722h18v16h-18zM211 729l4 4 7-8" fill="none" stroke="#78867E" stroke-width="1.7" stroke-linejoin="round"/>
+<text x="216" y="766" font-size="12" fill="#78867E" font-weight="400" text-anchor="middle">待办</text>
+<path d="M291 726a7 7 0 1 1 14 0c0 4-4 5-4 8h-6c0-3-4-4-4-8zM295 738h6" fill="none" stroke="#78867E" stroke-width="1.7" stroke-linejoin="round"/>
+<text x="298" y="766" font-size="12" fill="#78867E" font-weight="400" text-anchor="middle">想法</text>
+<rect x="127" y="781" width="96" height="4" rx="2" fill="#1E2A28"/>
+</g>
+<text x="464" y="151" font-size="16" fill="#596A63" font-weight="600" text-anchor="start">02  录音中</text>
+<g transform="translate(464,174)">
+<rect x="-6" y="-6" width="362" height="804" rx="43" fill="#DCE2DA" filter="url(#shadow)"/>
+<rect x="0" y="0" width="350" height="792" rx="38" fill="#F7F5F0"/>
+<text x="27" y="32" font-size="13" fill="#1E2A28" font-weight="600" text-anchor="start">9:41</text>
+<rect x="283" y="27" width="3" height="4" rx="1" fill="#1E2A28"/>
+<rect x="288" y="24" width="3" height="7" rx="1" fill="#1E2A28"/>
+<rect x="293" y="21" width="3" height="10" rx="1" fill="#1E2A28"/>
+<rect x="298" y="18" width="3" height="13" rx="1" fill="#1E2A28"/>
+<rect x="310" y="19" width="19" height="10" rx="3" fill="none" stroke="#1E2A28"/>
+<rect x="313" y="22" width="13" height="4" rx="1" fill="#1E2A28"/>
+<circle cx="175" cy="24" r="7" fill="#1E2A28"/>
+<text x="24" y="81" font-size="30" fill="#596A63" font-weight="400" text-anchor="start">‹</text>
+<text x="175" y="78" font-size="17" fill="#1E2A28" font-weight="600" text-anchor="middle">语音对话</text>
+<rect x="24" y="111" width="302" height="379" rx="28" fill="#244F45"/>
+<circle cx="175" cy="172" r="24" fill="#3C685A"/>
+<g transform="translate(175,169) scale(0.8)" fill="none" stroke="#D8E9DF" stroke-width="2.2" stroke-linecap="round"><rect x="-5" y="-12" width="10" height="17" rx="5"/><path d="M-10 0v2a10 10 0 0 0 20 0V0M0 12v6M-5 18H5"/></g>
+<text x="175" y="233" font-size="27" fill="#FFFFFF" font-weight="600" text-anchor="middle">我在听</text>
+<text x="175" y="265" font-size="13" fill="#C5D9CE" font-weight="400" text-anchor="middle">每一个想法，都可以慢慢说</text>
+<rect x="61" y="326.0" width="4" height="10" rx="2" fill="#AED4BC"/>
+<rect x="71" y="322.5" width="4" height="17" rx="2" fill="#AED4BC"/>
+<rect x="81" y="318.5" width="4" height="25" rx="2" fill="#AED4BC"/>
+<rect x="91" y="324.5" width="4" height="13" rx="2" fill="#AED4BC"/>
+<rect x="101" y="314.0" width="4" height="34" rx="2" fill="#AED4BC"/>
+<rect x="111" y="308.0" width="4" height="46" rx="2" fill="#AED4BC"/>
+<rect x="121" y="320.0" width="4" height="22" rx="2" fill="#AED4BC"/>
+<rect x="131" y="302.0" width="4" height="58" rx="2" fill="#AED4BC"/>
+<rect x="141" y="312.0" width="4" height="38" rx="2" fill="#AED4BC"/>
+<rect x="151" y="295.5" width="4" height="71" rx="2" fill="#AED4BC"/>
+<rect x="161" y="307.5" width="4" height="47" rx="2" fill="#AED4BC"/>
+<rect x="171" y="317.0" width="4" height="28" rx="2" fill="#AED4BC"/>
+<rect x="181" y="300.5" width="4" height="61" rx="2" fill="#AED4BC"/>
+<rect x="191" y="311.0" width="4" height="40" rx="2" fill="#AED4BC"/>
+<rect x="201" y="319.0" width="4" height="24" rx="2" fill="#AED4BC"/>
+<rect x="211" y="306.5" width="4" height="49" rx="2" fill="#AED4BC"/>
+<rect x="221" y="315.5" width="4" height="31" rx="2" fill="#AED4BC"/>
+<rect x="231" y="322.5" width="4" height="17" rx="2" fill="#AED4BC"/>
+<rect x="241" y="312.5" width="4" height="37" rx="2" fill="#AED4BC"/>
+<rect x="251" y="318.5" width="4" height="25" rx="2" fill="#AED4BC"/>
+<rect x="261" y="325.0" width="4" height="12" rx="2" fill="#AED4BC"/>
+<rect x="271" y="320.0" width="4" height="22" rx="2" fill="#AED4BC"/>
+<rect x="281" y="326.0" width="4" height="10" rx="2" fill="#AED4BC"/>
+<circle cx="146" cy="407" r="3" fill="#E7AF8F"/>
+<text x="161" y="413" font-size="18" fill="#FFFFFF" font-weight="500" text-anchor="start">00:18</text>
+<text x="175" y="451" font-size="12" fill="#C5D9CE" font-weight="400" text-anchor="middle">录音会先安全保存在手机</text>
+<text x="175" y="537" font-size="16" fill="#1E2A28" font-weight="600" text-anchor="middle">说完后，结束并发送</text>
+<text x="175" y="566" font-size="13" fill="#596A63" font-weight="400" text-anchor="middle">随后转写，并联系之前的记录</text>
+<rect x="24" y="615" width="80" height="54" rx="27" fill="#E8EBE4"/>
+<text x="64" y="648" font-size="15" fill="#596A63" font-weight="500" text-anchor="middle">取消</text>
+<rect x="116" y="615" width="210" height="54" rx="27" fill="#2C6E62"/>
+<rect x="144" y="636" width="12" height="12" rx="3" fill="#FFFFFF"/>
+<text x="225" y="648" font-size="15" fill="#FFFFFF" font-weight="600" text-anchor="middle">结束并发送</text>
+<text x="175" y="722" font-size="12" fill="#596A63" font-weight="400" text-anchor="middle">录音中 · 可随时取消</text>
+<rect x="127" y="781" width="96" height="4" rx="2" fill="#1E2A28"/>
+</g>
+<text x="864" y="151" font-size="16" fill="#596A63" font-weight="600" text-anchor="start">03  待办</text>
+<g transform="translate(864,174)">
+<rect x="-6" y="-6" width="362" height="804" rx="43" fill="#DCE2DA" filter="url(#shadow)"/>
+<rect x="0" y="0" width="350" height="792" rx="38" fill="#F7F5F0"/>
+<text x="27" y="32" font-size="13" fill="#1E2A28" font-weight="600" text-anchor="start">9:41</text>
+<rect x="283" y="27" width="3" height="4" rx="1" fill="#1E2A28"/>
+<rect x="288" y="24" width="3" height="7" rx="1" fill="#1E2A28"/>
+<rect x="293" y="21" width="3" height="10" rx="1" fill="#1E2A28"/>
+<rect x="298" y="18" width="3" height="13" rx="1" fill="#1E2A28"/>
+<rect x="310" y="19" width="19" height="10" rx="3" fill="none" stroke="#1E2A28"/>
+<rect x="313" y="22" width="13" height="4" rx="1" fill="#1E2A28"/>
+<circle cx="175" cy="24" r="7" fill="#1E2A28"/>
+<text x="24" y="80" font-size="28" fill="#1E2A28" font-weight="650" text-anchor="start">待办</text>
+<rect x="262" y="58" width="64" height="28" rx="14" fill="#E5EEE8"/>
+<text x="294.0" y="77" font-size="12" fill="#2C6E62" font-weight="600" text-anchor="middle">提醒</text>
+<text x="24" y="118" font-size="15" fill="#596A63" font-weight="400" text-anchor="start">一件一件，慢慢完成。</text>
+<rect x="24" y="147" width="62" height="28" rx="14" fill="#E5EEE8"/>
+<text x="55.0" y="166" font-size="12" fill="#2C6E62" font-weight="600" text-anchor="middle">今天</text>
+<rect x="95" y="147" width="62" height="28" rx="14" fill="#ECEFE9"/>
+<text x="126.0" y="166" font-size="12" fill="#596A63" font-weight="600" text-anchor="middle">未来</text>
+<rect x="166" y="147" width="80" height="28" rx="14" fill="#ECEFE9"/>
+<text x="206.0" y="166" font-size="12" fill="#596A63" font-weight="600" text-anchor="middle">未排期</text>
+<text x="24" y="216" font-size="13" fill="#596A63" font-weight="600" text-anchor="start">今天 · 11 月 15 日</text>
+<rect x="24" y="238" width="302" height="132" rx="24" fill="#FFFFFF"/>
+<circle cx="51" cy="268" r="9" fill="none" stroke="#93A69A"/>
+<text x="72" y="274" font-size="17" fill="#1E2A28" font-weight="600" text-anchor="start">研究语音输入方案</text>
+<text x="72" y="304" font-size="14" fill="#2C6E62" font-weight="600" text-anchor="start">09:00</text>
+<text x="72" y="334" font-size="12" fill="#596A63" font-weight="400" text-anchor="start">提醒已注册 · 关联安卓日记本</text>
+<rect x="24" y="384" width="302" height="107" rx="24" fill="#FFFFFF"/>
+<circle cx="51" cy="416" r="9" fill="none" stroke="#93A69A"/>
+<text x="72" y="422" font-size="17" fill="#1E2A28" font-weight="600" text-anchor="start">和朋友讨论产品想法</text>
+<text x="72" y="458" font-size="12" fill="#596A63" font-weight="400" text-anchor="start">16:00  ·  提前 10 分钟提醒</text>
+<text x="24" y="532" font-size="13" fill="#596A63" font-weight="600" text-anchor="start">已经完成</text>
+<rect x="24" y="552" width="302" height="90" rx="24" fill="#ECEFE9"/>
+<circle cx="51" cy="585" r="10" fill="#2C6E62"/>
+<path d="M46 585l3 3 6-7" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"/>
+<text x="72" y="591" font-size="16" fill="#596A63" font-weight="400" text-anchor="start">整理昨天的日记</text>
+<text x="72" y="618" font-size="12" fill="#596A63" font-weight="400" text-anchor="start">今天 08:30 完成</text>
+<path d="M20 701L330 701" stroke="#E7EAE4" stroke-width="1" fill="none" stroke-linecap="round"/>
+<path d="M43 722h18v12h-8l-6 4v-4h-4z" fill="none" stroke="#78867E" stroke-width="1.7" stroke-linejoin="round"/>
+<text x="52" y="766" font-size="12" fill="#78867E" font-weight="400" text-anchor="middle">对话</text>
+<path d="M126 720h16v18h-16zM130 725h8M130 730h8" fill="none" stroke="#78867E" stroke-width="1.7" stroke-linejoin="round"/>
+<text x="134" y="766" font-size="12" fill="#78867E" font-weight="400" text-anchor="middle">日记</text>
+<rect x="188" y="713" width="56" height="33" rx="16" fill="#E5EEE8"/>
+<path d="M207 722h18v16h-18zM211 729l4 4 7-8" fill="none" stroke="#2C6E62" stroke-width="1.7" stroke-linejoin="round"/>
+<text x="216" y="766" font-size="12" fill="#2C6E62" font-weight="600" text-anchor="middle">待办</text>
+<path d="M291 726a7 7 0 1 1 14 0c0 4-4 5-4 8h-6c0-3-4-4-4-8zM295 738h6" fill="none" stroke="#78867E" stroke-width="1.7" stroke-linejoin="round"/>
+<text x="298" y="766" font-size="12" fill="#78867E" font-weight="400" text-anchor="middle">想法</text>
+<rect x="127" y="781" width="96" height="4" rx="2" fill="#1E2A28"/>
+</g>
+<text x="1264" y="151" font-size="16" fill="#596A63" font-weight="600" text-anchor="start">04  待讨论的想法</text>
+<g transform="translate(1264,174)">
+<rect x="-6" y="-6" width="362" height="804" rx="43" fill="#DCE2DA" filter="url(#shadow)"/>
+<rect x="0" y="0" width="350" height="792" rx="38" fill="#F7F5F0"/>
+<text x="27" y="32" font-size="13" fill="#1E2A28" font-weight="600" text-anchor="start">9:41</text>
+<rect x="283" y="27" width="3" height="4" rx="1" fill="#1E2A28"/>
+<rect x="288" y="24" width="3" height="7" rx="1" fill="#1E2A28"/>
+<rect x="293" y="21" width="3" height="10" rx="1" fill="#1E2A28"/>
+<rect x="298" y="18" width="3" height="13" rx="1" fill="#1E2A28"/>
+<rect x="310" y="19" width="19" height="10" rx="3" fill="none" stroke="#1E2A28"/>
+<rect x="313" y="22" width="13" height="4" rx="1" fill="#1E2A28"/>
+<circle cx="175" cy="24" r="7" fill="#1E2A28"/>
+<text x="24" y="80" font-size="28" fill="#1E2A28" font-weight="650" text-anchor="start">想法</text>
+<text x="24" y="118" font-size="15" fill="#596A63" font-weight="400" text-anchor="start">有些念头，值得继续聊。</text>
+<rect x="24" y="147" width="96" height="28" rx="14" fill="#E5EEE8"/>
+<text x="72.0" y="166" font-size="12" fill="#2C6E62" font-weight="600" text-anchor="middle">待讨论  2</text>
+<rect x="131" y="147" width="80" height="28" rx="14" fill="#ECEFE9"/>
+<text x="171.0" y="166" font-size="12" fill="#596A63" font-weight="600" text-anchor="middle">积累中</text>
+<rect x="24" y="205" width="302" height="301" rx="24" fill="#FFFFFF"/>
+<rect x="43" y="224" width="86" height="28" rx="14" fill="#E5EEE8"/>
+<text x="86.0" y="243" font-size="12" fill="#2C6E62" font-weight="600" text-anchor="middle">已准备好</text>
+<text x="43" y="282" font-size="21" fill="#1E2A28" font-weight="600" text-anchor="start">安卓语音日记本</text>
+<text x="43" y="313" font-size="14" fill="#596A63" font-weight="400" text-anchor="start">已比较两种语音方案，</text>
+<text x="43" y="336" font-size="14" fill="#596A63" font-weight="400" text-anchor="start">结合了你之前关于离线记录的想法。</text>
+<rect x="43" y="358" width="264" height="66" rx="14" fill="#F0F4EF"/>
+<text x="57" y="382" font-size="11" fill="#596A63" font-weight="400" text-anchor="start">下次可以聊</text>
+<text x="57" y="405" font-size="13" fill="#244F45" font-weight="500" text-anchor="start">第一版要优先支持离线录音吗？</text>
+<text x="43" y="451" font-size="12" fill="#596A63" font-weight="400" text-anchor="start">3 条记录 · 今天更新</text>
+<rect x="43" y="466" width="264" height="22" rx="10" fill="#FFFFFF"/>
+<text x="43" y="482" font-size="14" fill="#2C6E62" font-weight="600" text-anchor="start">继续聊这个想法</text>
+<text x="305" y="482" font-size="20" fill="#2C6E62" font-weight="400" text-anchor="end">→</text>
+<rect x="24" y="523" width="302" height="135" rx="24" fill="#F1E9DE"/>
+<text x="43" y="555" font-size="17" fill="#1E2A28" font-weight="600" text-anchor="start">把零散笔记整理成播客</text>
+<text x="43" y="587" font-size="13" fill="#756A5C" font-weight="400" text-anchor="start">素材正在积累，暂时不用着急。</text>
+<text x="43" y="630" font-size="12" fill="#756A5C" font-weight="400" text-anchor="start">2 条记录 · 积累中</text>
+<path d="M20 701L330 701" stroke="#E7EAE4" stroke-width="1" fill="none" stroke-linecap="round"/>
+<path d="M43 722h18v12h-8l-6 4v-4h-4z" fill="none" stroke="#78867E" stroke-width="1.7" stroke-linejoin="round"/>
+<text x="52" y="766" font-size="12" fill="#78867E" font-weight="400" text-anchor="middle">对话</text>
+<path d="M126 720h16v18h-16zM130 725h8M130 730h8" fill="none" stroke="#78867E" stroke-width="1.7" stroke-linejoin="round"/>
+<text x="134" y="766" font-size="12" fill="#78867E" font-weight="400" text-anchor="middle">日记</text>
+<path d="M207 722h18v16h-18zM211 729l4 4 7-8" fill="none" stroke="#78867E" stroke-width="1.7" stroke-linejoin="round"/>
+<text x="216" y="766" font-size="12" fill="#78867E" font-weight="400" text-anchor="middle">待办</text>
+<rect x="270" y="713" width="56" height="33" rx="16" fill="#E5EEE8"/>
+<path d="M291 726a7 7 0 1 1 14 0c0 4-4 5-4 8h-6c0-3-4-4-4-8zM295 738h6" fill="none" stroke="#2C6E62" stroke-width="1.7" stroke-linejoin="round"/>
+<text x="298" y="766" font-size="12" fill="#2C6E62" font-weight="600" text-anchor="middle">想法</text>
+<rect x="127" y="781" width="96" height="4" rx="2" fill="#1E2A28"/>
+</g>
+<circle cx="72" cy="1028" r="8" fill="#F7F5F0"/>
+<text x="91" y="1033" font-size="13" fill="#596A63" font-weight="400" text-anchor="start">纸白</text>
+<circle cx="200" cy="1028" r="8" fill="#2C6E62"/>
+<text x="219" y="1033" font-size="13" fill="#596A63" font-weight="400" text-anchor="start">松绿</text>
+<circle cx="328" cy="1028" r="8" fill="#DE9C6D"/>
+<text x="347" y="1033" font-size="13" fill="#596A63" font-weight="400" text-anchor="start">暖橙</text>
+<text x="1616" y="1033" font-size="14" fill="#596A63" font-weight="400" text-anchor="end">语音为主 · 文本随时可用 · 提醒由 Android 执行</text>
+</g></svg>
